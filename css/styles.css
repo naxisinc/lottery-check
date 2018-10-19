@@ -1,0 +1,47 @@
+.result-area {
+  text-align: center;
+}
+.dot,
+.mega {
+  background: #f1f0f0;
+  border-radius: 50%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  color: #000000;
+  border: solid 3px black;
+  display: inline-block;
+  font-weight: bold;
+  line-height: 1.5em;
+  margin: 50px 50px;
+  text-align: center;
+  width: 1.5em;
+  height: 1.5em;
+  font-size: 3rem;
+  font-family: 'Courier New', Courier, monospace;
+}
+.form-area {
+  margin: 3rem 0;
+  text-align: center;
+}
+
+.black {
+  background: #000000;
+}
+.one {
+  background: orange;
+}
+.two {
+  background: green;
+}
+.three {
+  background: fuchsia;
+}
+.four {
+  background: brown;
+}
+.five {
+  background: purple;
+}
+.six {
+  background: gold;
+}

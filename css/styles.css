@@ -27,21 +27,21 @@
 .black {
   background: #000000;
 }
+.zero {
+  background: red;
+}
 .one {
-  background: orange;
+  background: blue;
 }
 .two {
   background: green;
 }
 .three {
-  background: fuchsia;
-}
-.four {
-  background: brown;
-}
-.five {
   background: purple;
 }
+.four {
+  background: yellow;
+}
 .six {
-  background: gold;
+  background: silver;
 }

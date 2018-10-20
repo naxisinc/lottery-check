@@ -1,20 +1,6 @@
-let arr = [
-  [9, 54, 46, 26, 27],
-  [49, 38, 19, 40, 17],
-  [41, 32, 58, 13, 22],
-  [42, 61, 11, 50, 8],
-  [17, 69, 18, 9, 70],
-  [1, 17, 40, 48, 28],
-  [51, 27, 55, 70, 40],
-  [28, 47, 53, 65, 40],
-  [62, 28, 9, 35, 22],
-  [47, 34, 5, 70, 4],
-  [14, 68, 51, 56, 4]
-];
-let mega = [13, 10, 15, 11, 12, 25, 22, 24, 16, 1, 2];
 let arrWinner = [];
 let arr_aux = [];
-let arrCount = [0, 0, 0, 0, 0];
+let arrCount = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
 
 // Counter of inputs
 let count = 0;
@@ -22,6 +8,10 @@ let count = 0;
 $(document).ready(() => {
   $('#form').on('submit', function(e) {
     e.preventDefault();
+
+    // console.log(arrCount[131]);
+    // console.log(arr[131]);
+    // console.log(mega[131]);
 
     count++;
     let value = parseInt($('#number').val());
@@ -31,19 +21,19 @@ $(document).ready(() => {
         coloring();
         switch (arrWinner[arrWinner.length - 1].color) {
           case 0:
-            $('#num' + count).addClass('one');
+            $('#num' + count).addClass('zero');
             break;
           case 1:
-            $('#num' + count).addClass('two');
+            $('#num' + count).addClass('one');
             break;
           case 2:
-            $('#num' + count).addClass('three');
+            $('#num' + count).addClass('two');
             break;
           case 3:
-            $('#num' + count).addClass('four');
+            $('#num' + count).addClass('three');
             break;
           case 4:
-            $('#num' + count).addClass('five');
+            $('#num' + count).addClass('four');
         }
       } else {
         $('#num' + count).addClass('black');
@@ -79,7 +69,8 @@ function search(value) {
 }
 
 function coloring() {
-  let colored = false;
+  // let cont = 0;
+  let flag = false;
   if (arrWinner.length === 1) {
     arrWinner[0].color = 0;
   } else {
@@ -87,22 +78,54 @@ function coloring() {
       for (const numbers of arr_aux) {
         for (const number of numbers) {
           if (number === arrWinner[index].value) {
-            colored = true;
-            arrCount[index]++;
+            arrCount[arrWinner.length - 2][index]++;
+            flag = true;
             break;
           }
         }
       }
     }
-    if (colored) {
-      let color = arrCount.indexOf(Math.max.apply(null, arrCount));
-      arrWinner[arrWinner.length - 1].color = color;
+    // console.log(cont);
+    // no sirve la condicion
+    // if (cont === arrWinner.length - 1) {
+    if (flag) {
+      console.log(getColor());
+      arrWinner[arrWinner.length - 1].color = arrWinner[getColor()].color;
     } else {
       arrWinner[arrWinner.length - 1].color = arrWinner.length - 1;
     }
+    console.log('arr_aux', arr_aux);
+    console.log('arrCount', arrCount);
   }
+  console.log('arrWinner', arrWinner);
   arr_aux = [];
-  arrCount = [0, 0, 0, 0, 0];
+}
+
+function getColor() {
+  let arrCopy = [];
+  for (let i = 0; i < arrWinner.length - 1; i++) {
+    arrCopy[i] = arrCount[arrWinner.length - 2][i];
+  }
+
+  let mf = 1;
+  let m = 0;
+  let item;
+  for (let i = 0; i < arrCopy.length; i++) {
+    for (let j = i; j < arrCopy.length; j++) {
+      if (arrCopy[i] == arrCopy[j]) m++;
+      if (mf < m) {
+        mf = m;
+        item = arrCopy[i];
+      }
+    }
+    m = 0;
+  }
+  if (item === 0 || item === undefined) {
+    // return el index dnd esta el mayor
+    return arrCopy.indexOf(Math.max.apply(null, arrCopy));
+  }
+  // return el index del q mas se repita
+  return arrCopy.indexOf(item);
 }
 
 function isMegaBall(value) {

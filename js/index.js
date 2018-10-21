@@ -1,17 +1,9 @@
-let arrWinner = [];
-let arr_aux = [];
-let arrCount = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
-
-// Counter of inputs
+let objWinner = [];
 let count = 0;
 
 $(document).ready(() => {
   $('#form').on('submit', function(e) {
     e.preventDefault();
-
-    // console.log(arrCount[131]);
-    // console.log(arr[131]);
-    // console.log(mega[131]);
 
     count++;
     let value = parseInt($('#number').val());
@@ -19,21 +11,23 @@ $(document).ready(() => {
       if (search(value)) {
         $('#num' + count).text(value);
         coloring();
-        switch (arrWinner[arrWinner.length - 1].color) {
-          case 0:
-            $('#num' + count).addClass('zero');
-            break;
-          case 1:
-            $('#num' + count).addClass('one');
-            break;
-          case 2:
-            $('#num' + count).addClass('two');
-            break;
-          case 3:
-            $('#num' + count).addClass('three');
-            break;
-          case 4:
-            $('#num' + count).addClass('four');
+        for (let i = 1; i <= objWinner.length; i++) {
+          switch (objWinner[i - 1].color) {
+            case 0:
+              $('#num' + i).addClass('zero');
+              break;
+            case 1:
+              $('#num' + i).addClass('one');
+              break;
+            case 2:
+              $('#num' + i).addClass('two');
+              break;
+            case 3:
+              $('#num' + i).addClass('three');
+              break;
+            case 4:
+              $('#num' + i).addClass('four');
+          }
         }
       } else {
         $('#num' + count).addClass('black');
@@ -55,77 +49,65 @@ function search(value) {
   for (const numbers of arr) {
     for (const number of numbers) {
       if (number === value) {
-        arr_aux.push(numbers);
         found = true;
         break;
       }
     }
   }
   if (found) {
-    arrWinner.push({ value });
+    objWinner.push({ value });
     return true;
   }
   return false;
 }
 
-function coloring() {
-  // let cont = 0;
-  let flag = false;
-  if (arrWinner.length === 1) {
-    arrWinner[0].color = 0;
-  } else {
-    for (let index = 0; index < arrWinner.length - 1; index++) {
-      for (const numbers of arr_aux) {
-        for (const number of numbers) {
-          if (number === arrWinner[index].value) {
-            arrCount[arrWinner.length - 2][index]++;
-            flag = true;
-            break;
-          }
-        }
-      }
-    }
-    // console.log(cont);
-    // no sirve la condicion
-    // if (cont === arrWinner.length - 1) {
-    if (flag) {
-      console.log(getColor());
-      arrWinner[arrWinner.length - 1].color = arrWinner[getColor()].color;
-    } else {
-      arrWinner[arrWinner.length - 1].color = arrWinner.length - 1;
-    }
-    console.log('arr_aux', arr_aux);
-    console.log('arrCount', arrCount);
+function ObjectToArray() {
+  let arr_winner = [];
+  for (let i = 0; i < objWinner.length; i++) {
+    arr_winner[i] = objWinner[i].value;
   }
-  console.log('arrWinner', arrWinner);
-  arr_aux = [];
+  return arr_winner;
 }
 
-function getColor() {
-  let arrCopy = [];
-  for (let i = 0; i < arrWinner.length - 1; i++) {
-    arrCopy[i] = arrCount[arrWinner.length - 2][i];
-  }
-
-  let mf = 1;
-  let m = 0;
-  let item;
-  for (let i = 0; i < arrCopy.length; i++) {
-    for (let j = i; j < arrCopy.length; j++) {
-      if (arrCopy[i] == arrCopy[j]) m++;
-      if (mf < m) {
-        mf = m;
-        item = arrCopy[i];
-      }
+function isIncluded() {
+  let arr_winner = ObjectToArray();
+  for (const sub_arr of arr) {
+    if (_.intersection(sub_arr, arr_winner).length === arr_winner.length) {
+      return true;
     }
-    m = 0;
   }
-  if (item === 0 || item === undefined) {
-    // return el index dnd esta el mayor
-    return arrCopy.indexOf(Math.max.apply(null, arrCopy));
+  return false;
+}
+
+function coloring() {
+  if (objWinner.length === 1) {
+    objWinner[0].color = 0;
+  } else {
+    let currentPosition = objWinner.length - 1;
+    if (!isIncluded()) {
+      let cont = 0;
+      let maxInt = []; // Almacena el mayor length de intersections
+      let arr_winner = ObjectToArray();
+      for (let i = 0; i < arr.length; i++) {
+        let res = _.intersection(arr[i], arr_winner);
+        if (res.length > cont) {
+          maxInt = res;
+          cont = res.length;
+        }
+      }
+      console.log(maxInt);
+      for (let i = 0; i <= currentPosition; i++) {
+        if (_.includes(maxInt, objWinner[i].value)) {
+          console.log('entre');
+          objWinner[i].color = currentPosition;
+        }
+      }
+    } else {
+      // same color for everyone
+      objWinner[currentPosition].color = 0;
+    }
   }
-  // return el index del q mas se repita
-  return arrCopy.indexOf(item);
+  console.log(objWinner);
 }
 
 function isMegaBall(value) {

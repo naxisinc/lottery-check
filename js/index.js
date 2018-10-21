@@ -95,19 +95,20 @@ function coloring() {
           cont = res.length;
         }
       }
-      console.log(maxInt);
-      for (let i = 0; i <= currentPosition; i++) {
-        if (_.includes(maxInt, objWinner[i].value)) {
-          console.log('entre');
-          objWinner[i].color = currentPosition;
+
+      if (_.includes(maxInt, objWinner[currentPosition].value)) {
+        for (let i = 0; i <= currentPosition; i++) {
+          if (_.includes(maxInt, objWinner[i].value)) {
+            objWinner[i].color = currentPosition;
+          }
         }
+      } else {
+        objWinner[currentPosition].color = currentPosition;
       }
     } else {
-      // same color for everyone
       objWinner[currentPosition].color = 0;
     }
   }
-  console.log(objWinner);
 }
 
 function isMegaBall(value) {

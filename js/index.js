@@ -1,6 +1,5 @@
 let objWinner = [];
 let count = 0;
-let mega_color;
 
 $(document).ready(() => {
   $('#form').on('submit', function(e) {
@@ -22,10 +21,13 @@ $(document).ready(() => {
       let res = isMegaBall(value);
       if (res !== -1) {
         $('#num5').text(value);
-        if (res === 1) {
+        if (res === 999) {
           coloring(objWinner[0].color, 5);
         } else {
-          coloring(parseInt(mega_color), 5);
+          coloring(res, 5);
+          // for (let i = 0; i < objWinner.length; i++) {
+          //   coloring(objWinner[i].color, i);
+          // }
         }
       } else {
         $('#num5').addClass('black');
@@ -123,24 +125,44 @@ function isMegaBall(value) {
         arr_aux[pos++] = i;
       }
     }
+    console.log('arr_aux', arr_aux);
 
     let arr_winner = ObjectToArray();
     for (let i = 0; i < arr_aux.length; i++) {
       if (_.difference(arr[arr_aux[i]], arr_winner).length === 0) {
-        return 1; // Bingo!!!
+        return 999; // Bingo!!!
       }
     }
-    let colors = [];
-    for (let i = 0; i < objWinner.length; i++) {
-      colors[i] = objWinner[i].color;
+
+    let maxInt = []; // Almacena el mayor length de intersections
+    let length = 0;
+    console.log('arr_winner', arr_winner);
+    for (let i = 0; i < arr_aux.length; i++) {
+      console.log('arr[arr_aux[i]]', arr[arr_aux[i]]);
+      let res = _.intersection(arr[arr_aux[i]], arr_winner);
+      console.log('res', res);
+      if (res.length > length) {
+        maxInt = res;
+        length = res.length;
+      }
     }
-    mega_color = _.head(
-      _(colors)
-        .countBy()
-        .entries()
-        .maxBy('[1]')
-    );
-    return 0; // Esta pero no fue Bingo!
+
+    console.log('maxInt', maxInt);
+
+    if (maxInt.length > 0) {
+      console.log('objWinner', objWinner);
+      console.log('color = ', getColorByValue(maxInt[0]));
+    }
+
+    return 5; // Color de Mega por default
   }
   return -1; // No esta
+}
+
+function getColorByValue(value) {
+  for (let i = 0; i < objWinner.length; i++) {
+    if (objWinner[i].value === value) {
+      return objWinner[i].color;
+    }
+  }
 }

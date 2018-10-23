@@ -32,6 +32,9 @@ $(document).ready(() => {
       } else {
         $('#num5').addClass('black');
       }
+
+      // Call the final result
+      final_results(value);
     }
     $('#number').val('');
   });
@@ -160,28 +163,16 @@ function setColor() {
 
 function isMegaBall(value) {
   if (_.includes(mega, value)) {
-    // Busco las posiciones en mega donde aparezca el mega-value
-    let arr_aux = [];
-    let pos = 0;
-    for (let i = 0; i < mega.length; i++) {
-      if (mega[i] === value) {
-        arr_aux[pos++] = i;
-      }
-    }
-    console.log('arr_aux', arr_aux);
-    // Verifico si fue Bingo
-    let arr_winner = ObjectToArray();
-    for (let i = 0; i < arr_aux.length; i++) {
-      if (_.difference(arr[arr_aux[i]], arr_winner).length === 0) {
-        return 999; // Bingo!!!
-      }
-    }
+    // uso arr_aux para si no es true usarlo de paso
+    let arr_aux = iAmMillionaire(value);
+    if (arr_aux === true) return 999;
 
     // Para cada uno de los resultados dnd aparecio mega-value en mega
     // uso la posicion para interseptar al array ganador con el array
     // de numeros en la posicion almacenada en el arr_aux
     let maxInt = []; // Almacena el mayor length de intersections
     let length = 0;
+    let arr_winner = ObjectToArray();
     console.log('arr_winner', arr_winner);
     for (let i = 0; i < arr_aux.length; i++) {
       console.log('arr[arr_aux[i]]', arr[arr_aux[i]]);
@@ -201,7 +192,7 @@ function isMegaBall(value) {
     // fueron interseptados
     if (maxInt.length > 0) {
       // console.log('objWinner', objWinner);
-      // console.log('color = ', getColorByValue(maxInt[0]));
+      console.log('color = ', getColorByValue(maxInt[0]));
       // retorno el color del q mas intersepciones tuvo
       return getColorByValue(maxInt[0]);
     }
@@ -217,4 +208,37 @@ function getColorByValue(value) {
       return objWinner[i].color;
     }
   }
+}
+
+function final_results(value) {
+  let req = iAmMillionaire(value);
+  if (req === true) {
+    $('#megamillion').text('You are a fucking millionaire');
+    return;
+  }
+
+  let arr_winner = ObjectToArray();
+  for (let i = 0; i < arr.length; i++) {
+    if (_.intersection(arr[i], arr_winner).length === 5) {
+      $('#five').text('1');
+    }
+  }
+}
+
+function iAmMillionaire(value) {
+  let arr_aux = [];
+  let pos = 0;
+  for (let i = 0; i < mega.length; i++) {
+    if (mega[i] === value) {
+      arr_aux[pos++] = i;
+    }
+  }
+  // Verifico si fue Bingo
+  let arr_winner = ObjectToArray();
+  for (let i = 0; i < arr_aux.length; i++) {
+    if (_.difference(arr[arr_aux[i]], arr_winner).length === 0) {
+      return true;
+    }
+  }
+  return arr_aux;
 }

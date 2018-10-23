@@ -1,3 +1,6 @@
+body {
+  font-family: 'Courier New', Courier, monospace;
+}
 .result-area {
   text-align: center;
 }
@@ -17,7 +20,6 @@
   width: 1.5em;
   height: 1.5em;
   font-size: 3rem;
-  font-family: 'Courier New', Courier, monospace;
 }
 .form-area {
   margin: 3rem 0;

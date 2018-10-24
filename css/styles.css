@@ -21,9 +21,14 @@ body {
   height: 1.5em;
   font-size: 3rem;
 }
-.form-area {
+.form-area,
+#results,
+h1 {
   margin: 3rem 0;
   text-align: center;
+}
+ul {
+  list-style: none;
 }
 
 .black {

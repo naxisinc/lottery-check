@@ -214,15 +214,55 @@ function final_results(value) {
   let req = iAmMillionaire(value);
   if (req === true) {
     $('#megamillion').text('You are a fucking millionaire');
-    return;
+  } else {
+    $('#megamillion').text('0');
   }
 
+  let fiveCount = 0;
+  let fourPlus = 0;
+  let fourCount = 0;
+  let threePlus = 0;
+  let threeCount = 0;
+  let twoPlus = 0;
+  let onePlus = 0;
+  let oneCount = 0;
   let arr_winner = ObjectToArray();
   for (let i = 0; i < arr.length; i++) {
     if (_.intersection(arr[i], arr_winner).length === 5) {
-      $('#five').text('1');
+      fiveCount++;
+    } else if (_.intersection(arr[i], arr_winner).length === 4) {
+      fourCount++;
+      if (mega[i] === value) {
+        fourPlus++;
+      }
+    } else if (_.intersection(arr[i], arr_winner).length === 3) {
+      threeCount++;
+      if (mega[i] === value) {
+        threePlus++;
+      }
+    } else if (_.intersection(arr[i], arr_winner).length === 2) {
+      if (mega[i] === value) {
+        twoPlus++;
+      }
+    } else if (_.intersection(arr[i], arr_winner).length === 1) {
+      if (mega[i] === value) {
+        onePlus++;
+      }
+    }
+    if (mega[i] === value) {
+      oneCount++;
     }
   }
+  $('#five').text(fiveCount);
+  $('#fourplus').text(fourPlus);
+  $('#four').text(fourCount);
+  $('#threeplus').text(threePlus);
+  $('#three').text(threeCount);
+  $('#twoplus').text(twoPlus);
+  $('#oneplus').text(onePlus);
+  $('#one').text(oneCount);
+
+  $('#results').show();
 }
 
 function iAmMillionaire(value) {
